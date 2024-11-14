@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import MainLayout from "@/components/layout/main-layout";
 
 export const metadata: Metadata = {
   title: "NexChat",
@@ -16,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased overscroll-none`}>
+      <body className={`antialiased overscroll-none overflow-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -28,7 +29,7 @@ export default function RootLayout({
               baseTheme: [dark],
             }}
           >
-            {children}
+            <MainLayout>{children}</MainLayout>
           </ClerkProvider>
         </ThemeProvider>
       </body>
