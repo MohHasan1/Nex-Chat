@@ -1,12 +1,23 @@
+import { logError, logInfo } from "@/utils/log";
 import mongoose from "mongoose";
 
 export const connectMongoDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL!);
-    console.log("connected to mongoDB");
+    logInfo("connected to mongoDB");
   } catch (error) {
-    console.log("====================================");
-    console.log(error);
-    console.log("====================================");
+    logError(error);
   }
 };
+
+export function checkMongoDBEnvVar() {
+  const mongodbUri = process.env.NEXT_MONGO_URL;
+
+  if (!mongodbUri) {
+    throw new Error(
+      "Missing MongoDB URI. Please set NEXT_MONGO_URL in your .env.local file."
+    );
+  }
+}
+
+

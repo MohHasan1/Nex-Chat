@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme/theme";
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import type { Metadata } from "next";
 import MainLayout from "@/components/layout/main-layout";
+import Clerk_Provider from "@/providers/clerk/clerk-provider";
+import checkClerkEnvVar from "@/config/clerk-config";
+import { checkMongoDBEnvVar } from "@/config/db-config";
+import ThemeProvider from "@/providers/theme/theme-provider";
+
+// env variable check //
+checkClerkEnvVar();
+checkMongoDBEnvVar();
 
 export const metadata: Metadata = {
   title: "NexChat",
@@ -24,13 +29,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClerkProvider
-            appearance={{
-              baseTheme: [dark],
-            }}
-          >
+          <Clerk_Provider>
             <MainLayout>{children}</MainLayout>
-          </ClerkProvider>
+          </Clerk_Provider>
         </ThemeProvider>
       </body>
     </html>
