@@ -1,6 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import MainLayout from "@/components/layout/main-layout";
 import Clerk_Provider from "@/providers/clerk/clerk-provider";
 import checkClerkEnvVar from "@/config/clerk-config";
 import { checkMongoDBEnvVar } from "@/config/db-config";
@@ -15,11 +14,7 @@ export const metadata: Metadata = {
   description: "Chat Application",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased overscroll-none overflow-hidden`}>
@@ -29,11 +24,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Clerk_Provider>
-            <MainLayout>{children}</MainLayout>
-          </Clerk_Provider>
+          <Clerk_Provider>{children}</Clerk_Provider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
+type Props = {
+  children: React.ReactNode;
+};

@@ -7,10 +7,11 @@ export default async function Home() {
 }
 
 {
-  /* 
-<SignedOut>
-<SignInButton />
-</SignedOut>
-<SignedIn>
-</SignedIn> */
+/* 
+  <SignedOut>
+  <SignInButton />
+  </SignedOut>
+  <SignedIn>
+  </SignedIn> 
+*/
 }
