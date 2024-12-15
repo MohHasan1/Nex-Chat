@@ -23,6 +23,8 @@ import { useToast } from "@/hooks/use-toast";
 import { logError, logInfo } from "@/utils/log";
 import { LoaderPinwheel, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import UserType from "@/types/user-type";
+import ChatType from "@/types/chat-type";
 
 const NewChat = () => {
   return (
@@ -65,9 +67,9 @@ const NewChat = () => {
 export default NewChat;
 
 const DisplayUsers = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [currUser, setCurrUser] = useState<any | null>(null);
-  const [chats, setChats] = useState<any>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [currUser, setCurrUser] = useState<UserType | null>(null);
+  const [chats, setChats] = useState<ChatType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -77,13 +79,13 @@ const DisplayUsers = () => {
         setLoading(true);
 
         const allUser = await GetAllUsersFromMongo();
-        if ("error" in allUser) throw new Error("No users found");
+        if ("error" in allUser!) throw new Error("No user found");
 
         const currentUser = await GetCurrentUserFromMongo();
-        if ("error" in currentUser!) throw new Error("No users found");
+        if ("error" in currentUser!) throw new Error("No user found");
 
-        const chatList = await GetUserChatList(currentUser?._id);
-        if ("error" in currentUser!) throw new Error("No users found");
+        const chatList = await GetUserChatList(currentUser._id);
+        if ("error" in chatList!) throw new Error("Error Loading the chats");
 
         setChats(chatList);
         setUsers(allUser);
@@ -98,13 +100,13 @@ const DisplayUsers = () => {
   }, []);
 
   const { toast } = useToast();
-  
+
   async function handleNewChat(userId: string) {
     try {
       setLoading(true);
       setSelectedUserId(userId);
       const res = await CreateNewChat({
-        users: [userId, currUser?._id],
+        users: [userId, currUser!._id],
         createdBy: currUser?._id,
         isGroupChat: false,
       });

@@ -1,6 +1,6 @@
+import { Document } from "mongoose";
 
-
-type ChatType = {
+interface IChat {
   _id: string;
   users: string[];
   createdBy: string;
@@ -13,6 +13,8 @@ type ChatType = {
   unReadCounts: Record<string, number>;
   createdAt: Date;
   updatedAt: Date;
-};
+}
+
+type ChatType = IChat & Document;
 
 export default ChatType;

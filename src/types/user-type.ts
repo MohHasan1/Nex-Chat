@@ -1,6 +1,6 @@
+import { Document } from "mongoose";
 
-
-type UserType = {
+interface IUser {
   _id: string;
   clerkUserId: string;
   firstName: string;
@@ -9,6 +9,7 @@ type UserType = {
   email: string;
   profilePictureUrl: string;
   bio: string;
-};
+}
+type UserType = IUser & Document;
 
 export default UserType;

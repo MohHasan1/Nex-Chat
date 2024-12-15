@@ -1,3 +1,4 @@
+import UserType from "@/types/user-type";
 import { deleteModel, model, models, Schema } from "mongoose";
 
 const userSchema = new Schema(
@@ -43,9 +44,10 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-// Check if the model is already defined, if not, define it
-if (models && models["User"]) deleteModel("User")
-  const user = model("User", userSchema);
-// const user = models.User || model("User", userSchema);
+// Check if the model is already defined, if yes, delete it and define again
+if (models && models["User"]) deleteModel("User");
 
+const user = model<UserType>("User", userSchema);
 export default user;
+
+// const user = models.User || model("User", userSchema);

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectMongoDB } from "@/config/db-config";
 import user from "@/models/user-model";
-// import UserType from "@/types/user-type";
+import UserType from "@/types/user-type";
 import { cloneOrSerialize } from "@/utils/cloneOrSerialize";
 import { currentUser, User } from "@clerk/nextjs/server";
 
@@ -17,10 +17,8 @@ export const checkOrCreateUserInMongo = async () => {
     }
 
     // Check if the user exists in MongoDB
-    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id }).lean();
-    if (mongoUser) {
-      return true;
-    }
+    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id });
+    if (mongoUser) return true;
 
     // Else create a new user
     await CreateNewUserInMongo(clerkUser);
@@ -39,9 +37,11 @@ export const GetCurrentUserFromMongo = async () => {
     }
 
     // Check if the user exists in MongoDB
-    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id });
-    if (mongoUser) return cloneOrSerialize(mongoUser) as any;
-    
+    const mongoUser: UserType | null = await user.findOne({
+      clerkUserId: clerkUser.id,
+    });
+    if (mongoUser) return cloneOrSerialize(mongoUser);
+    return { error: "User not found" };
   } catch (error: any) {
     return { error: error.message };
   }
@@ -50,7 +50,9 @@ export const GetCurrentUserFromMongo = async () => {
 export const CreateNewUserInMongo = async (clerkUser: User) => {
   try {
     // Check if the user exists in MongoDB
-    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id }).lean();
+    const mongoUser: UserType | null = await user.findOne({
+      clerkUserId: clerkUser.id,
+    });
     if (mongoUser) return cloneOrSerialize(mongoUser);
 
     // If the user does not exist in MongoDB, create a new user
@@ -64,10 +66,10 @@ export const CreateNewUserInMongo = async (clerkUser: User) => {
     };
 
     // Create the new user in the database
-    const newUser = await user.create(newUserPayload);
+    const newUser: UserType = await user.create(newUserPayload);
 
     // Return the new user as a plain object
-    return newUser.toObject();
+    return cloneOrSerialize(newUser);
   } catch (error: any) {
     return { error: error.message };
   }
@@ -75,7 +77,7 @@ export const CreateNewUserInMongo = async (clerkUser: User) => {
 
 export const GetAllUsersFromMongo = async () => {
   try {
-    const users = await user.find({});
+    const users: UserType[] = await user.find({});
     return users.map((user) => cloneOrSerialize(user));
   } catch (error: any) {
     return { error: error.message };

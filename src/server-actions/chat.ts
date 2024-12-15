@@ -6,7 +6,7 @@ import { cloneOrSerialize } from "@/utils/cloneOrSerialize";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const CreateNewChat = async (payload: Partial<ChatType>) => {
   try {
-    const newChat = await chat.create(payload);
+    const newChat: ChatType = await chat.create(payload);
     return cloneOrSerialize(newChat);
   } catch (error: any) {
     return { error: error.message };
@@ -15,7 +15,10 @@ export const CreateNewChat = async (payload: Partial<ChatType>) => {
 
 export const GetUserChatList = async (userId: string) => {
   try {
-    const res = await chat.find({ users: { $in: [userId] } }).populate("users");
+    const res: ChatType[] = await chat
+      .find({ users: { $in: [userId] } })
+      .populate("users");
+      
     return res.map(cloneOrSerialize);
   } catch (error: any) {
     return { error: error.message };
