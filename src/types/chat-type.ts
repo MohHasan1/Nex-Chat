@@ -1,15 +1,15 @@
-import { Types } from "mongoose";
+
 
 type ChatType = {
-  _id: Types.ObjectId;
-  users: Types.ObjectId[];
-  createdBy: Types.ObjectId;
-  lastMessage?: Types.ObjectId;
+  _id: string;
+  users: string[];
+  createdBy: string;
+  lastMessage?: string;
   chatImgUrl?: string;
   isGroupChat: boolean;
   groupName?: string;
   groupBio: string;
-  groupAdmins?: Types.ObjectId[];
+  groupAdmins?: string[];
   unReadCounts: Record<string, number>;
   createdAt: Date;
   updatedAt: Date;

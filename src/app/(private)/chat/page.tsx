@@ -7,8 +7,8 @@ const Page = () => {
   return (
     <>
       <SidebarProvider className="flex min-h-full">
+        <SidebarTrigger className="block md:hidden"/>
         <ChatSideBar />
-        <SidebarTrigger />
         <ChatArea />
       </SidebarProvider>
     </>

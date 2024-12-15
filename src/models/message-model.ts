@@ -1,3 +1,4 @@
+// Message is a text a user sends //
 import { model, models, Schema } from "mongoose";
 
 const messageSchema = new Schema(

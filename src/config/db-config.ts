@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 
 export const connectMongoDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL!);
+    await mongoose.connect(process.env.NEXT_MONGO_URL!);
     logInfo("connected to mongoDB");
   } catch (error) {
-    logError(error);
+    logError("Failed to connect to mongoDB");
   }
 };
 
@@ -19,5 +19,3 @@ export function checkMongoDBEnvVar() {
     );
   }
 }
-
-

@@ -4,6 +4,7 @@ import Clerk_Provider from "@/providers/clerk/clerk-provider";
 import checkClerkEnvVar from "@/config/clerk-config";
 import { checkMongoDBEnvVar } from "@/config/db-config";
 import ThemeProvider from "@/providers/theme/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 // env variable check //
 checkClerkEnvVar();
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: Readonly<Props>) {
           enableSystem
           disableTransitionOnChange
         >
-          <Clerk_Provider>{children}</Clerk_Provider>
+          <Clerk_Provider>
+            {children} <Toaster />
+          </Clerk_Provider>
         </ThemeProvider>
       </body>
     </html>

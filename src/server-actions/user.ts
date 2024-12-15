@@ -1,26 +1,57 @@
-"use server"
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectMongoDB } from "@/config/db-config";
 import user from "@/models/user-model";
-import { currentUser } from "@clerk/nextjs/server";
+// import UserType from "@/types/user-type";
+import { cloneOrSerialize } from "@/utils/cloneOrSerialize";
+import { currentUser, User } from "@clerk/nextjs/server";
 
-export const getCurrentUser = async () => {
+connectMongoDB();
+
+export const checkOrCreateUserInMongo = async () => {
   try {
-    // Ensure MongoDB is connected
-    await connectMongoDB();
-
     // Get the current user from Clerk
     const clerkUser = await currentUser();
-
     if (!clerkUser) {
       return { error: "No user found in Clerk" };
     }
 
     // Check if the user exists in MongoDB
     const mongoUser = await user.findOne({ clerkUserId: clerkUser.id }).lean();
+    if (mongoUser) {
+      return true;
+    }
 
-    // If user exists, return the MongoDB user object
-    if (mongoUser) return mongoUser;
+    // Else create a new user
+    await CreateNewUserInMongo(clerkUser);
+    return true;
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const GetCurrentUserFromMongo = async () => {
+  try {
+    // Get the current user from Clerk
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
+      return { error: "No user found in Clerk" };
+    }
+
+    // Check if the user exists in MongoDB
+    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id });
+    if (mongoUser) return cloneOrSerialize(mongoUser) as any;
+    
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const CreateNewUserInMongo = async (clerkUser: User) => {
+  try {
+    // Check if the user exists in MongoDB
+    const mongoUser = await user.findOne({ clerkUserId: clerkUser.id }).lean();
+    if (mongoUser) return cloneOrSerialize(mongoUser);
 
     // If the user does not exist in MongoDB, create a new user
     const newUserPayload = {
@@ -41,3 +72,29 @@ export const getCurrentUser = async () => {
     return { error: error.message };
   }
 };
+
+export const GetAllUsersFromMongo = async () => {
+  try {
+    const users = await user.find({});
+    return users.map((user) => cloneOrSerialize(user));
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+// You need .lean(), serialization, or JSON.parse(JSON.stringify()) depending on the use case:
+
+// .lean():
+// - Returns plain JavaScript objects instead of Mongoose documents.
+// - Use when you don't need Mongoose methods like .save() or .populate().
+// - Faster for read-only operations.
+
+// Serialization:
+// - Converts MongoDB-specific types (e.g., ObjectId → string, Date → ISO string).
+// - Needed for compatibility with JSON-based APIs or client-side props in frameworks like Next.js.
+
+// JSON.parse(JSON.stringify()):
+// - Quick way to serialize and strip non-JSON-compatible fields.
+// - Use for small datasets, but not ideal for performance-critical or complex custom handling.
+
+// Choose based on whether you need simplicity (parse+stringify), speed (lean), or control (custom serialization).

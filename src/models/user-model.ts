@@ -1,4 +1,4 @@
-import { model, models, Schema } from "mongoose";
+import { deleteModel, model, models, Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -44,6 +44,8 @@ const userSchema = new Schema(
 );
 
 // Check if the model is already defined, if not, define it
-const user = models.User || model("User", userSchema);
+if (models && models["User"]) deleteModel("User")
+  const user = model("User", userSchema);
+// const user = models.User || model("User", userSchema);
 
 export default user;

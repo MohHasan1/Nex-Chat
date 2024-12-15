@@ -1,4 +1,6 @@
-import { model, models, Schema } from "mongoose";
+// chat contains bunch of messages //
+import { connectMongoDB } from "@/config/db-config";
+import { deleteModel, model, models, Schema } from "mongoose";
 
 const chatSchema = new Schema(
   {
@@ -40,6 +42,9 @@ const chatSchema = new Schema(
   { timestamps: true }
 );
 
-const chat = models.Chat || model("Chat", chatSchema);
+
+if (models && models["Chat"]) deleteModel("Chat")
+const chat = model("Chat", chatSchema);
+// const chat = models.Chat || model("Chat", chatSchema);
 
 export default chat;

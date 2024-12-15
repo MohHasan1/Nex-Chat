@@ -1,4 +1,5 @@
 export function logError(...errors: unknown[]) {
+  logInfo(process.env.NODE_ENV)
   if (process.env.NODE_ENV !== "production")
     console.error("DEBUG-ERROR:\n", ...errors);
 }

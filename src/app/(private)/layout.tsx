@@ -1,8 +1,19 @@
+"use client"
 import Header from "@/components/common/header";
 import Main from "@/components/common/main";
+import { checkOrCreateUserInMongo } from "@/server-actions/user";
 import { SignedIn } from "@clerk/nextjs";
+import { useEffect } from "react";
 
 export default function PrivateLayout({ children }: Props) {
+  useEffect(() => {
+    async function checkUser() {
+      await checkOrCreateUserInMongo();
+    }
+
+    checkUser();
+  }, []);
+
   return (
     <>
       <SignedIn>
