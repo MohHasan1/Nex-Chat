@@ -5,6 +5,8 @@ import checkClerkEnvVar from "@/config/clerk-config";
 import { checkMongoDBEnvVar } from "@/config/db-config";
 import ThemeProvider from "@/providers/theme/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import ReduxProvider from "@/providers/redux/ReduxProvider";
+import InitialDataLoader from "@/providers/InitialDataLoader";
 
 // env variable check //
 checkClerkEnvVar();
@@ -26,7 +28,12 @@ export default function RootLayout({ children }: Readonly<Props>) {
           disableTransitionOnChange
         >
           <Clerk_Provider>
-            {children} <Toaster />
+            <ReduxProvider>
+              <InitialDataLoader>
+                {children}
+                <Toaster />
+              </InitialDataLoader>
+            </ReduxProvider>
           </Clerk_Provider>
         </ThemeProvider>
       </body>

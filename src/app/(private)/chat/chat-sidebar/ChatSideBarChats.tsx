@@ -15,6 +15,8 @@ import { logError, logInfo } from "@/utils/log";
 import { useEffect, useState } from "react";
 import ChatCard from "../chat-components/ChatCard";
 import { LoaderPinwheel } from "lucide-react";
+import UserType from "@/types/user-type";
+import ChatType from "@/types/chat-type";
 
 const ChatSideBarChats = () => {
   const [activeButton, setActiveButton] = useState<string | null>(null);
@@ -22,16 +24,22 @@ const ChatSideBarChats = () => {
     setActiveButton(buttonId);
   };
 
-  const [currUser, setCurrUser] = useState<any>([]);
-  const [chats, setChats] = useState<any>([]);
+  const [currUser, setCurrUser] = useState<UserType>();
+  const [chats, setChats] = useState<ChatType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // const { currentUserId }: UserStateType = useSelector(
+  //   (state: any) => state.user
+  // );
 
   useEffect(() => {
     async function getChatList() {
       try {
         setLoading(true);
         const currUser = await GetCurrentUserFromMongo();
+        if ("error" in currUser) throw new Error("") 
         const res = await GetUserChatList(currUser?._id);
+        if ("error" in res) throw new Error("") 
 
         logInfo(res);
         setChats(res);
@@ -56,10 +64,12 @@ const ChatSideBarChats = () => {
 
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
-              {loading &&  <LoaderPinwheel className="animate-spin mx-auto w-full" />}
+              {loading && (
+                <LoaderPinwheel className="animate-spin mx-auto w-full" />
+              )}
               {chats.map((chat: any) => {
                 const user = chat.users.find(
-                  (u: any) => u._id !== currUser._id
+                  (u: any) => u._id !== currUser!._id
                 );
                 return (
                   <SidebarMenuItem key={chat._id}>
