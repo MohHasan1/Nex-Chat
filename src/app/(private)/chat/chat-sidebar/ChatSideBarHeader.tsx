@@ -15,7 +15,9 @@ const ChatSideBarHeader = () => {
   return (
     <SidebarHeader>
       <SidebarMenu>
-        <SidebarMenuItem className={`flex ${open && "justify-between items-center"}`}>
+        <SidebarMenuItem
+          className={`flex ${open && "justify-between items-center"}`}
+        >
           <div className={`flex ${open ? "block" : "hidden"}`}>
             <NewChat />
             <NewGroup />

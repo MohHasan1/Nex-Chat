@@ -1,4 +1,5 @@
 import ChatType from "@/types/chat-type";
+import UserType from "@/types/user-type";
 import { createSlice } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({
@@ -21,6 +22,6 @@ export const { SetChats, SetSelectedChat } = chatSlice.actions;
 export default chatSlice;
 
 export type ChatStateType = {
-  chat: ChatType[];
-  selectedChat: string | null;
+  chats: ChatType[];
+  selectedChat: ChatType | null;
 };

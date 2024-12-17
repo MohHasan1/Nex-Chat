@@ -9,57 +9,34 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { GetUserChatList } from "@/server-actions/chat";
-import { GetCurrentUserFromMongo } from "@/server-actions/user";
-import { logError, logInfo } from "@/utils/log";
-import { useEffect, useState } from "react";
-import ChatCard from "../chat-components/ChatCard";
+import ChatCard from "./ChatCard";
 import { LoaderPinwheel } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreStateType } from "@/store/redux-store";
+import { SetSelectedChat } from "@/store/slices/chat-slice";
 import UserType from "@/types/user-type";
 import ChatType from "@/types/chat-type";
 
 const ChatSideBarChats = () => {
-  const [activeButton, setActiveButton] = useState<string | null>(null);
-  const handleClick = (buttonId: string) => {
-    setActiveButton(buttonId);
+  const { currentUserId } = useSelector((state: StoreStateType) => state.user);
+  const { chats, selectedChat } = useSelector(
+    (state: StoreStateType) => state.chat
+  );
+
+  const dispatch = useDispatch();
+  const handleClick = (user: ChatType) => {
+    dispatch(SetSelectedChat(user));
   };
 
-  const [currUser, setCurrUser] = useState<UserType>();
-  const [chats, setChats] = useState<ChatType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // const { currentUserId }: UserStateType = useSelector(
-  //   (state: any) => state.user
-  // );
-
-  useEffect(() => {
-    async function getChatList() {
-      try {
-        setLoading(true);
-        const currUser = await GetCurrentUserFromMongo();
-        if ("error" in currUser) throw new Error("") 
-        const res = await GetUserChatList(currUser?._id);
-        if ("error" in res) throw new Error("") 
-
-        logInfo(res);
-        setChats(res);
-        setCurrUser(currUser);
-      } catch (error: any) {
-        logError(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getChatList();
-  }, []);
+  // tempo //
+  const loading = false;
 
   return (
     <>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="cursor-default">
-            Chats {loading}
+            Chats
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -67,17 +44,17 @@ const ChatSideBarChats = () => {
               {loading && (
                 <LoaderPinwheel className="animate-spin mx-auto w-full" />
               )}
-              {chats.map((chat: any) => {
-                const user = chat.users.find(
-                  (u: any) => u._id !== currUser!._id
+              {chats.map((chat) => {
+                const user = (chat.users as UserType[]).find(
+                  (u) => u._id !== currentUserId
                 );
                 return (
                   <SidebarMenuItem key={chat._id}>
                     <SidebarMenuButton
-                      isActive={user._id === activeButton}
-                      onClick={() => handleClick(user._id)}
+                      isActive={user?._id === selectedChat?._id}
+                      onClick={() => handleClick(user!)}
                     >
-                      <ChatCard user={user} key={user._id} />
+                      <ChatCard user={user!} key={user?._id} />
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

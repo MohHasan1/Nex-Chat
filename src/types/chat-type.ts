@@ -1,8 +1,9 @@
 import { Document } from "mongoose";
+import UserType from "./user-type";
 
 interface IChat {
   _id: string;
-  users: string[];
+  users: string[] | UserType[];
   createdBy: string;
   lastMessage?: string;
   chatImgUrl?: string;

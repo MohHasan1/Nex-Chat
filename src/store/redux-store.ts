@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./slices/user-slice";
-import chatSlice from "./slices/chat-slice";
+import userSlice, { UserStateType } from "./slices/user-slice";
+import chatSlice, { ChatStateType } from "./slices/chat-slice";
 
 const store = configureStore({
   reducer: {
@@ -8,5 +8,10 @@ const store = configureStore({
     chat: chatSlice.reducer,
   },
 });
+
+export type StoreStateType = {
+  user: UserStateType;
+  chat: ChatStateType;
+};
 
 export default store;

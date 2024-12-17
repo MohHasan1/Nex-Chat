@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased overscroll-none overflow-hidden`}>
+      <body className={`antialiased overscroll-none h-dvh w-dvw overflow-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

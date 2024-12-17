@@ -1,14 +1,17 @@
-import { Types } from "mongoose";
+import { Document } from "mongoose";
+import UserType from "./user-type";
 
-type MessageType = {
-  _id: Types.ObjectId;
-  chat: Types.ObjectId;
-  sender: Types.ObjectId;
+interface IMessage {
+  _id?: string;
+  chat: string;
+  sender: string | UserType;
   text: string;
   image?: string;
-  readBy: Types.ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
-};
+  readBy?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+type MessageType = IMessage & Document;
 
 export default MessageType;
