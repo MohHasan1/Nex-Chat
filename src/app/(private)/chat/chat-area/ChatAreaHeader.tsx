@@ -5,17 +5,17 @@ import { StoreStateType } from "@/store/redux-store";
 import { useSelector } from "react-redux";
 
 const ChatAreaHeader = () => {
-  const { selectedChat } = useSelector((state: StoreStateType) => state.chat);
+  const { selectedChatUser } = useSelector((state: StoreStateType) => state.chat);
 
-  if (!selectedChat) return undefined;
+  if (!selectedChatUser) return undefined;
   return (
     <header className="flex gap-4 justify-start items-center py-4 px-2 pointer-events-none">
       <Avatar>
-        <AvatarImage src={selectedChat?.profilePictureUrl} />
+        <AvatarImage src={selectedChatUser?.profilePictureUrl} />
         <AvatarFallback>SUP</AvatarFallback>
       </Avatar>
 
-      <h1>{selectedChat?.username}</h1>
+      <h1>{selectedChatUser?.username}</h1>
     </header>
   );
 };

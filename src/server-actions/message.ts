@@ -5,7 +5,7 @@ import chat from "@/models/chat-model";
 import message from "@/models/message-model";
 import MessageType from "@/types/message-type";
 import { cloneOrSerialize } from "@/utils/cloneOrSerialize";
-import { revalidatePath } from "next/cache";
+
 
 export const SendNewMessage = async (msgPayload: Partial<MessageType>) => {
   try {

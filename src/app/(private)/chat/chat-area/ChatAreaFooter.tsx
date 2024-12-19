@@ -2,13 +2,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { useToast } from "@/hooks/use-toast";
 import { SendNewMessage } from "@/server-actions/message";
 import { StoreStateType } from "@/store/redux-store";
-import { SetSelectedChat } from "@/store/slices/chat-slice";
-import { logError } from "@/utils/log";
+import { logError, logInfo } from "@/utils/log";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ChatAreaFooter = () => {
   // const { toast } = useToast();
@@ -18,8 +16,6 @@ const ChatAreaFooter = () => {
   );
   const { selectedChat } = useSelector((state: StoreStateType) => state.chat);
 
-  // temp //
-  const dispatch = useDispatch();
 
   async function handleSend() {
     if (msg === "") return;
@@ -34,12 +30,8 @@ const ChatAreaFooter = () => {
 
       const res = await SendNewMessage(msgPayload);
       if ("error" in res) throw new Error(res.error);
-
+      logInfo("msg sent" + res.success)
       setMsg("");
-
-      // temp //
-      dispatch(SetSelectedChat(null));
-      dispatch(SetSelectedChat(selectedChat));
     } catch (error: any) {
       logError(error);
     }

@@ -13,19 +13,32 @@ const MessageBox = ({ msg }: { msg: MessageType }) => {
   const sender = msg.sender as UserType;
 
   return (
-    <div className="flex flex-col items-end gap-1">
+    <div
+      className={`flex flex-col gap-1 justify-center ${
+        sender._id === currentUserId
+          ? "ml-auto items-end"
+          : "mr-auto items-start"
+      }  `}
+    >
       <div
         key={msg._id}
-        className={`border border-purple-800
-        ${
-          sender._id === currentUserId ? "ml-auto" : "mr-auto"
-        } border w-fit py-2 px-4 rounded-xl`}
+        className={`border backdrop-blur-2xl  ${
+          sender._id === currentUserId
+            ? " border-purple-900 bg-purple-900/30"
+            : " border-violet-400 bg-violet-400/30"
+        }
+        w-fit py-2 px-4 rounded-xl flex-wrap`}
       >
-        <span className="font-inter text-md">{msg.text}</span>
+        <span className="font-inter text-md ">{msg.text}</span>
       </div>
-      <span className="text-xs text-gray-400">
-        {dayjs(msg.createdAt).format("DD-MM-YYYY HH:mm")}
-      </span>
+      <div className="text-xs font-sand flex justify-center items-center gap-1 pointer-events-none">
+        <span className="text-slate-400">
+          {dayjs(msg.createdAt).format("DD-MM-YYYY")}
+        </span>
+        <span className="text-gray-300">
+          {dayjs(msg.createdAt).format("hh:mm A")}
+        </span>
+      </div>
     </div>
   );
 };
