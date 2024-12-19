@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SendNewMessage } from "@/server-actions/message";
 import { StoreStateType } from "@/store/redux-store";
-import { logError, logInfo } from "@/utils/log";
+import { logError } from "@/utils/log";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -15,7 +15,6 @@ const ChatAreaFooter = () => {
     (state: StoreStateType) => state.user
   );
   const { selectedChat } = useSelector((state: StoreStateType) => state.chat);
-
 
   async function handleSend() {
     if (msg === "") return;
@@ -30,7 +29,8 @@ const ChatAreaFooter = () => {
 
       const res = await SendNewMessage(msgPayload);
       if ("error" in res) throw new Error(res.error);
-      logInfo("msg sent" + res.success)
+
+      // empty the input //
       setMsg("");
     } catch (error: any) {
       logError(error);

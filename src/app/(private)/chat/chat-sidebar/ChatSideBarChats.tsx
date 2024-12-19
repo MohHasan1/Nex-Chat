@@ -20,6 +20,7 @@ import {
 import UserType from "@/types/user-type";
 import ChatType from "@/types/chat-type";
 import { logInfo } from "@/utils/log";
+import { ClearUnreadCount } from "@/server-actions/message";
 
 const ChatSideBarChats = () => {
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
@@ -28,9 +29,12 @@ const ChatSideBarChats = () => {
   );
 
   const dispatch = useDispatch();
-  const handleClick = (chat: ChatType, user: UserType) => {
+  const handleClick = async (chat: ChatType, selectedUser: UserType) => {
     dispatch(SetSelectedChat(chat));
-    dispatch(SetSelectedChatUser(user));
+    dispatch(SetSelectedChatUser(selectedUser));
+
+    // reset the unReadCount for the user for the clicked chat //
+    await ClearUnreadCount(currentUserId!, chat._id);
   };
 
   // tempo //
@@ -53,14 +57,20 @@ const ChatSideBarChats = () => {
                 const user = (chat.users as UserType[]).find(
                   (u) => u._id !== currentUserId
                 );
-                logInfo(user?.username)
+                logInfo(user?.username);
                 return (
                   <SidebarMenuItem key={chat._id}>
                     <SidebarMenuButton
+                      size={"lg"}
                       isActive={user?._id === selectedChatUser?._id}
                       onClick={() => handleClick(chat, user!)}
                     >
-                      <ChatCard user={user!} key={user?._id} />
+                      <ChatCard
+                        chat={chat}
+                        user={user!}
+                        currentUserId={currentUserId!}
+                        key={chat._id}
+                      />
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
