@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import ChatCard from "./ChatCard";
+import ChatCard from "./_components/ChatCard";
 import { LoaderPinwheel } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreStateType } from "@/store/redux-store";
@@ -19,12 +19,11 @@ import {
 } from "@/store/slices/chat-slice";
 import UserType from "@/types/user-type";
 import ChatType from "@/types/chat-type";
-import { logInfo } from "@/utils/log";
 import { ClearUnreadCount } from "@/server-actions/message";
 
 const ChatSideBarChats = () => {
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
-  const { chats, selectedChatUser } = useSelector(
+  const { chats, selectedChat } = useSelector(
     (state: StoreStateType) => state.chat
   );
 
@@ -57,12 +56,12 @@ const ChatSideBarChats = () => {
                 const user = (chat.users as UserType[]).find(
                   (u) => u._id !== currentUserId
                 );
-                logInfo(user?.username);
+               
                 return (
                   <SidebarMenuItem key={chat._id}>
                     <SidebarMenuButton
                       size={"lg"}
-                      isActive={user?._id === selectedChatUser?._id}
+                      isActive={chat?._id === selectedChat?._id}
                       onClick={() => handleClick(chat, user!)}
                     >
                       <ChatCard

@@ -1,7 +1,7 @@
 import React from "react";
 import ChatSideBar from "./chat-sidebar/ChatSideBar";
 import ChatArea from "./chat-area/ChatArea";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Page = () => {
   return (

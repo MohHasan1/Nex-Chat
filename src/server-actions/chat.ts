@@ -17,7 +17,10 @@ export const GetUserChatList = async (userId: string) => {
   try {
     const res: ChatType[] = await chat
       .find({ users: { $in: [userId] } })
-      .populate("users");
+      .populate("users")
+      .populate("createdBy")
+      .populate("groupAdmins")
+      .sort({updatedAt:-1})
       
     return res.map(cloneOrSerialize);
   } catch (error: any) {

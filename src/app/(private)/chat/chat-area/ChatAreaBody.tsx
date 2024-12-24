@@ -3,10 +3,10 @@
 import { GetChatMessage } from "@/server-actions/message";
 import { StoreStateType } from "@/store/redux-store";
 import MessageType from "@/types/message-type";
-import { logError, logInfo } from "@/utils/log";
+import { logError } from "@/utils/log";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import MessageBox from "./components/MessageBox";
+import MessageBox from "./_components/MessageBox";
 
 const ChatAreaBody = () => {
   const [msgs, setMsgs] = useState<MessageType[]>([]);
@@ -25,7 +25,6 @@ const ChatAreaBody = () => {
         const res = await GetChatMessage(selectedChat?._id);
         if ("error" in res) throw new Error("Error Loading Messages...");
         setMsgs(res);
-        logInfo(res);
       } catch (error: any) {
         logError(error.message);
       } finally {

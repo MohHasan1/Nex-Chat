@@ -4,13 +4,13 @@ import UserType from "./user-type";
 interface IChat {
   _id: string;
   users: string[] | UserType[];
-  createdBy: string;
+  createdBy: string | UserType;
   lastMessage?: string;
   chatImgUrl?: string;
   isGroupChat: boolean;
   groupName?: string;
-  groupBio: string;
-  groupAdmins?: string[];
+  groupBio?: string | undefined;
+  groupAdmins?: string[] | UserType[];
   unReadCounts: Record<string, number>;
   createdAt: Date;
   updatedAt: Date;

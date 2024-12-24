@@ -24,7 +24,7 @@ const InitialDataLoader = ({ children }: { children: ReactNode }) => {
         dispatch(SetCurrentUserId(currentUser._id));
         dispatch(SetCurrentUserData(currentUser));
 
-        // user's chat list //
+        // current user's chat list //
         const chatList = await GetUserChatList(currentUser?._id);
         if ("error" in chatList) throw new Error("Error Fetching Chats");
         dispatch(SetChats(chatList));

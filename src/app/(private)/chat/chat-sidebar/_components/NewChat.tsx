@@ -20,7 +20,7 @@ import {
 } from "@/server-actions/user";
 // import UserType from "@/types/user-type";
 import { useToast } from "@/hooks/use-toast";
-import { logError, logInfo } from "@/utils/log";
+import { logError } from "@/utils/log";
 import { LoaderPinwheel, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import UserType from "@/types/user-type";
@@ -30,7 +30,7 @@ const NewChat = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">New Chat</Button>
+        <Button variant="ghost" className="px-1 py-1">New Chat</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -111,11 +111,11 @@ const DisplayUsers = () => {
         isGroupChat: false,
       });
       if ("error" in res) throw new Error("Error While adding new user.");
-      logInfo(res);
-      logInfo("User added successfully");
+      
       toast({
         title: "User added successfully",
       });
+
     } catch (error: any) {
       toast({
         title: "Could not add user, please try again.",
@@ -128,13 +128,13 @@ const DisplayUsers = () => {
 
   return (
     <>
-      <div className="mx-auto my-4 max-w-[60dvw] max-h-[50dvh] overflow-y-auto">
+      <div className="mx-auto my-4 max-w-[60dvw] max-h-[50dvh]">
         <div>
           {!selectedUserId && loading && (
             <LoaderPinwheel className="animate-spin" />
           )}
         </div>
-        <div className="grid grid-cols-1 gap-3 ">
+        <div className="grid grid-cols-1 gap-3 overflow-y-auto ">
           {users.map((user) => {
             if (
               user._id === currUser?._id ||
