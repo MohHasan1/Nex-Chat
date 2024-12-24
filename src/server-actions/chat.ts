@@ -13,6 +13,18 @@ export const CreateNewChat = async (payload: Partial<ChatType>) => {
   }
 };
 
+export const UpdateChatById = async (
+  chatId: string,
+  payload: Partial<ChatType>
+) => {
+  try {
+    await chat.findByIdAndUpdate(chatId, payload);
+    return { success: "Chat updated successfully!" };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
 export const GetUserChatList = async (userId: string) => {
   try {
     const res: ChatType[] = await chat
@@ -20,9 +32,18 @@ export const GetUserChatList = async (userId: string) => {
       .populate("users")
       .populate("createdBy")
       .populate("groupAdmins")
-      .sort({updatedAt:-1})
-      
+      .sort({ updatedAt: -1 });
+
     return res.map(cloneOrSerialize);
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+export const GetChatById = async (chatId: string) => {
+  try {
+    const res = await chat.findById(chatId);
+
+    return cloneOrSerialize(res);
   } catch (error: any) {
     return { error: error.message };
   }

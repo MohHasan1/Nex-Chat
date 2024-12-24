@@ -16,11 +16,13 @@ import { FC } from "react";
 import MemberCard from "./MemberCard";
 import { Separator } from "@/components/ui/separator";
 import dayjs from "dayjs";
+import Link from "next/link";
 
 const ChatInfo: FC<Props> = ({ chat, chatUser }) => {
   const isGroup = chat.isGroupChat;
   const groupMembers = chat.users as UserType[];
   const groupCreatedBy = chat.createdBy as UserType;
+
   return (
     <>
       <Sheet>
@@ -32,9 +34,16 @@ const ChatInfo: FC<Props> = ({ chat, chatUser }) => {
 
         <SheetContent>
           <SheetHeader className="mb-4">
-            <SheetTitle>
-              {isGroup ? chat.groupName : chatUser.username}
-            </SheetTitle>
+            <div className="flex justify-start items-center gap-5">
+              <SheetTitle>
+                {isGroup ? chat.groupName : chatUser.username}
+              </SheetTitle>
+              <div hidden={!isGroup}>
+                <Button size={"sm"} variant={"ghost"} asChild>
+                  <Link href={`/groups/edit-group/${chat._id}`}>Edit</Link>
+                </Button>
+              </div>
+            </div>
             <SheetDescription>
               {isGroup ? chat.groupBio : chatUser.bio}
             </SheetDescription>
@@ -52,7 +61,7 @@ const ChatInfo: FC<Props> = ({ chat, chatUser }) => {
               <h1>Created By :</h1>
               <span className="text-slate-400">{groupCreatedBy.username}</span>
             </div>
-            <Separator className="my-4"/>
+            <Separator className="my-4" />
             {isGroup && (
               <div className="font-sand flex flex-col justify-center items-start gap-4 pointer-events-none">
                 <h1>Group members:</h1>

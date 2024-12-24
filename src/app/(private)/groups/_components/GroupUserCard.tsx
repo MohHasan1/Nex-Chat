@@ -2,9 +2,10 @@
 import UserType from "@/types/user-type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
+import { logInfo } from "@/utils/log";
 
 const GroupUserCard = ({ user, selectedUsersId, setSelectedUserId }: Props) => {
-
+  logInfo(selectedUsersId)
   function handleOnChange() {
     if (selectedUsersId.includes(user._id)) {
       const ids = selectedUsersId.filter((id) => id !== user._id);

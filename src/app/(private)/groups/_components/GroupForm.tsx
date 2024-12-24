@@ -1,8 +1,9 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StoreStateType } from "@/store/redux-store";
 import ChatType from "@/types/chat-type";
 import UserType from "@/types/user-type";
-import { type FormEvent, useRef, useState } from "react";
+import { FC, type FormEvent, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import GroupUserCard from "./GroupUserCard";
 import { logError, logInfo } from "@/utils/log";
@@ -10,10 +11,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CreateNewChat } from "@/server-actions/chat";
+import { CreateNewChat, UpdateChatById } from "@/server-actions/chat";
 import { useRouter } from "next/navigation";
 
-const GroupForm = () => {
+const GroupForm: FC<Props> = ({ oldChat }) => {
+  const isEdit = oldChat ? true : false;
+
   const { chats } = useSelector((state: StoreStateType) => state.chat);
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
   const users = extract_chatsUser(chats, currentUserId!);
@@ -25,6 +28,25 @@ const GroupForm = () => {
 
   const groupNameRef = useRef<HTMLInputElement>(null);
   const groupDescRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isEdit) {
+      if (groupNameRef.current) {
+        groupNameRef.current.value = oldChat?.groupName || "";
+      }
+      if (groupDescRef.current) {
+        groupDescRef.current.value = oldChat?.groupBio || "";
+      }
+    }
+  }, [isEdit, oldChat]);
+
+  // Update state once oldChat is available  - async prob
+  useEffect(() => {
+    if (oldChat?.users) {
+      const userIds = oldChat?.users.filter((id) => id !== currentUserId);
+      setSelectedUserId(userIds as string[]);
+    }
+  }, [oldChat]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,8 +70,16 @@ const GroupForm = () => {
           createdBy: currentUserId!,
           groupAdmins: [currentUserId!],
         };
-        const res = await CreateNewChat(payload);
+
+        let res = null;
+        if (oldChat) {
+          res = await UpdateChatById(oldChat._id!, payload);
+        } else {
+          res = await CreateNewChat(payload);
+        }
+        
         if (!("error" in res)) {
+          //TODO; maybe add a toast //
           if (groupNameRef.current) groupNameRef.current.value = "";
           if (groupDescRef.current) groupDescRef.current.value = "";
 
@@ -57,7 +87,7 @@ const GroupForm = () => {
           router.push("/chat");
         }
       } catch (error: any) {
-        logError(error.message)
+        logError(error.message);
       } finally {
         setLoading(false);
       }
@@ -66,7 +96,11 @@ const GroupForm = () => {
 
   return (
     <section className="flex flex-col items-center justify-center size-full">
-      <div className="container w-full h-1/3 border rounded-sm flex flex-col justify-start items-center gap-4">
+      <div
+        className={`${
+          isEdit && "hidden"
+        } container w-full h-1/3 border rounded-sm flex flex-col justify-start items-center gap-4`}
+      >
         <h1 className="border-b border-t rounded-t-sm border-t-purple-500 border-purple-600 w-full px-2 py-1">
           Select users to add to group
         </h1>
@@ -105,7 +139,7 @@ const GroupForm = () => {
             </div>
 
             <Button variant={"secondary"} type="submit" disabled={loading}>
-              Create Group
+              {isEdit ? <span>Edit Group</span> : <span>Create Group</span>}
             </Button>
           </form>
         </div>
@@ -114,9 +148,9 @@ const GroupForm = () => {
   );
 };
 
-// type Props = {
-
-// };
+type Props = {
+  oldChat?: ChatType;
+};
 
 export default GroupForm;
 
