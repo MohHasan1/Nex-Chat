@@ -46,7 +46,7 @@ const GroupForm: FC<Props> = ({ oldChat }) => {
       const userIds = oldChat?.users.filter((id) => id !== currentUserId);
       setSelectedUserId(userIds as string[]);
     }
-  }, [oldChat]);
+  }, [currentUserId, oldChat]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
