@@ -20,6 +20,8 @@ import {
 import UserType from "@/types/user-type";
 import ChatType from "@/types/chat-type";
 import { ClearUnreadCount } from "@/server-actions/message";
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
 
 const ChatSideBarChats = () => {
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
@@ -35,6 +37,11 @@ const ChatSideBarChats = () => {
     // reset the unReadCount for the user for the clicked chat //
     await ClearUnreadCount(currentUserId!, chat._id);
   };
+
+  // const router = useRouter();
+  // useEffect(() => {
+  //   router.refresh();
+  // }, []);
 
   // tempo //
   const loading = false;
@@ -56,7 +63,7 @@ const ChatSideBarChats = () => {
                 const user = (chat.users as UserType[]).find(
                   (u) => u._id !== currentUserId
                 );
-               
+
                 return (
                   <SidebarMenuItem key={chat._id}>
                     <SidebarMenuButton

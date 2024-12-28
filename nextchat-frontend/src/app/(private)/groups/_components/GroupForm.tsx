@@ -19,11 +19,12 @@ const GroupForm: FC<Props> = ({ oldChat }) => {
 
   const { chats } = useSelector((state: StoreStateType) => state.chat);
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
-  const users = extract_chatsUser(chats, currentUserId!);
-
+  
   const [selectedUsersId, setSelectedUserId] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const users = extract_chatsUser(chats, currentUserId!);
+  
   const router = useRouter();
 
   const groupNameRef = useRef<HTMLInputElement>(null);
@@ -83,8 +84,8 @@ const GroupForm: FC<Props> = ({ oldChat }) => {
           if (groupNameRef.current) groupNameRef.current.value = "";
           if (groupDescRef.current) groupDescRef.current.value = "";
 
-          router.refresh();
           router.push("/chat");
+          // router.refresh();
         }
       } catch (error: any) {
         logError(error.message);
