@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { logError, logInfo } from "@/utils/log";
 import mongoose from "mongoose";
 
@@ -5,8 +6,8 @@ export const connectMongoDB = async () => {
   try {
     await mongoose.connect(process.env.NEXT_MONGO_URL!);
     logInfo("connected to mongoDB");
-  } catch (error) {
-    logError("Failed to connect to mongoDB");
+  } catch (error:any) {
+    logError("Failed to connect to mongoDB" + error);
   }
 };
 

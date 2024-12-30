@@ -7,10 +7,12 @@ import ThemeProvider from "@/providers/theme/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import ReduxProvider from "@/providers/redux/ReduxProvider";
 import InitialDataLoader from "@/providers/InitialDataLoader";
+import { checkSocketEnvVar } from "@/config/socket-config";
 
 // env variable check //
 checkClerkEnvVar();
 checkMongoDBEnvVar();
+checkSocketEnvVar();
 
 export const metadata: Metadata = {
   title: "NexChat",
@@ -20,7 +22,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<Props>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased overscroll-none h-dvh w-dvw overflow-hidden`}>
+      <body
+        className={`antialiased overscroll-none h-dvh w-dvw overflow-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

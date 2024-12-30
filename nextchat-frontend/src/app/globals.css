@@ -14,11 +14,14 @@
   width: 100dvw;
 } */
 
+.cl-button__signOut {
+  display: none;
+}
+
 /* clerk */
 .cl-internal-1dauvpw {
   display: none !important;
 }
-
 
 @layer base {
   :root {

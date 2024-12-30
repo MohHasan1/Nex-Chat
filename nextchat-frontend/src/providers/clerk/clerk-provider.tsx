@@ -6,6 +6,7 @@ const Clerk_Provider = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <ClerkProvider
+        signInUrl="/chat"
         appearance={{
           baseTheme: [dark],
         }}
