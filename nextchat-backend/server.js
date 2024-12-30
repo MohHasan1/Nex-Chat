@@ -21,7 +21,7 @@ const io = new Server(server, {
 
 let connectedUsers = [];
 io.on("connection", (socket) => {
-  logInfo(`socket ${socket.id} connected`);
+  // logInfo(`socket ${socket.id} connected`);
 
   socket.on("login", (userId) => {
     logInfo(userId);
@@ -32,16 +32,22 @@ io.on("connection", (socket) => {
       if (!connectedUsers.includes(userId)) connectedUsers.push(userId);
     }
 
-    io.to(userId).emit("test", "Hello room");
-    logInfo(connectedUsers);
+    // send a list of online users to all online users //
+    connectedUsers.forEach((user) => {
+      io.to(user).emit("online-users", connectedUsers);
+    });
   });
 
   socket.on("logout", (userId) => {
     logInfo(userId, "room is removed!");
 
+    // remove user room //
     socket.leave(userId);
     connectedUsers = connectedUsers.filter((id) => id !== userId);
 
-    logInfo(connectedUsers);
+    // send a list of online users to all online users //
+    connectedUsers.forEach((user) => {
+      io.to(user).emit("online-users", connectedUsers);
+    });
   });
 });

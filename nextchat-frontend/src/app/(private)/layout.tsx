@@ -4,10 +4,11 @@ import Main from "@/components/common/main";
 import socket from "@/config/socket-config";
 import { checkOrCreateUserInMongo } from "@/server-actions/user";
 import { StoreStateType } from "@/store/redux-store";
+import { SetOnlineUsers } from "@/store/slices/chat-slice";
 import { logInfo } from "@/utils/log";
 import { SignedIn } from "@clerk/nextjs";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PrivateLayout({ children }: Props) {
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
@@ -21,12 +22,18 @@ export default function PrivateLayout({ children }: Props) {
     checkUser();
   }, []);
 
+  const dispatch = useDispatch();
   // socket connection //
   useEffect(() => {
+    // establish a socket connection with the server to create a room //
     if (currentUserId) socket.emit("login", currentUserId);
 
-    socket.on("test", (data) => {logInfo(data)})
-  }, [currentUserId]);
+    socket.on("online-users", (users) => {
+      logInfo(users);
+      dispatch(SetOnlineUsers(users));
+    });
+    
+  }, [currentUserId, dispatch]);
 
   return (
     <>

@@ -24,7 +24,7 @@ const ChatAreaBody = () => {
         setLoading(true);
         const res = await GetChatMessage(selectedChat?._id);
         if ("error" in res) throw new Error("Error Loading Messages...");
-        setMsgs(res);
+        setMsgs(res.reverse());
       } catch (error: any) {
         logError(error.message);
       } finally {

@@ -8,6 +8,7 @@ const chatSlice = createSlice({
     chats: [],
     selectedChat: null,
     selectedChatUser: null,
+    onlineUsers: [],
   },
   reducers: {
     SetChats: (state, action) => {
@@ -19,10 +20,13 @@ const chatSlice = createSlice({
     SetSelectedChatUser: (state, action) => {
       state.selectedChatUser = action.payload;
     },
+    SetOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
   },
 });
 
-export const { SetChats, SetSelectedChat, SetSelectedChatUser } =
+export const { SetChats, SetSelectedChat, SetSelectedChatUser, SetOnlineUsers } =
   chatSlice.actions;
 export default chatSlice;
 
@@ -30,4 +34,5 @@ export type ChatStateType = {
   chats: ChatType[];
   selectedChat: ChatType | null;
   selectedChatUser: UserType | null;
+  onlineUsers: string[];
 };
