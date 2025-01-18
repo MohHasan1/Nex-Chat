@@ -1,18 +1,19 @@
 export function logError(...errors: unknown[]) {
-  logInfo(process.env.NODE_ENV);
-  // if (process.env.NODE_ENV !== "production")
-  console.error("DEBUG-ERROR:\n", ...errors);
+  logInfo(process.env.NODE_ENV)
+  if (process.env.NODE_ENV !== "production")
+    console.error("DEBUG-ERROR:\n", ...errors);
 }
 
 export function logInfo(...info: unknown[]) {
-  // if (process.env.NODE_ENV !== "production")
-  console.info("DEBUG-INFO:\n", ...info);
+  if (process.env.NODE_ENV !== "production")
+    console.info("DEBUG-INFO:\n", ...info);
 }
 
 export function logWarn(...warnings: unknown[]) {
-  // if (process.env.NODE_ENV !== "production")
-  console.warn("DEBUG-WARN:\n", ...warnings);
+  if (process.env.NODE_ENV !== "production")
+    console.warn("DEBUG-WARN:\n", ...warnings);
 }
+
 
 /*
 Instead of using console.log everywhere during dev, using this function makes it easier to debug, 

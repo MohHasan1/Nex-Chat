@@ -8,7 +8,7 @@ import { SendNewMessage } from "@/server-actions/message";
 import { StoreStateType } from "@/store/redux-store";
 import { logError } from "@/utils/log";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useState, KeyboardEvent  } from "react";
 import { useSelector } from "react-redux";
 
 const ChatAreaFooter = () => {
@@ -55,16 +55,25 @@ const ChatAreaFooter = () => {
     }
   }
 
+  function handleEnter(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevents the default Enter key behavior (e.g., form submit)
+      handleSend(); // Calls the handleSend function when Enter is pressed
+    }
+  }
+
   return (
     <footer className="flex justify-center items-center gap-4 py-4 px-2">
-      <Button variant={"outline"} className="rounded-xl">
+      {/* <Button variant={"outline"} className="rounded-xl">
         Emoji
-      </Button>
+      </Button> */}
       <Input
         value={msg as string}
         onChange={(e) => setMsg(e.target.value)}
         className="rounded-xl font-sand font-medium"
         type="text"
+        placeholder="message/text"
+        onKeyDown={handleEnter}
       />
       <Button variant={"outline"} onClick={handleSend} className="rounded-xl">
         Send

@@ -39,6 +39,7 @@ export const GetUserChatList = async (userId: string) => {
     return { error: error.message };
   }
 };
+
 export const GetChatById = async (chatId: string) => {
   try {
     const res = await chat.findById(chatId);
@@ -48,3 +49,5 @@ export const GetChatById = async (chatId: string) => {
     return { error: error.message };
   }
 };
+
+

@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,35 +10,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { CreateNewChat, GetUserChatList } from "@/server-actions/chat";
 import {
   GetAllUsersFromMongo,
   GetCurrentUserFromMongo,
 } from "@/server-actions/user";
-// import UserType from "@/types/user-type";
 import { useToast } from "@/hooks/use-toast";
-import { logError } from "@/utils/log";
-import { LoaderPinwheel, Search } from "lucide-react";
+import { LoaderPinwheel } from "lucide-react";
 import { useEffect, useState } from "react";
 import UserType from "@/types/user-type";
 import ChatType from "@/types/chat-type";
+import useReFetchChats from "@/hooks/useReFetchChats";
 
 const NewChat = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="px-1 py-1">New Chat</Button>
+        <Button variant="ghost" className="px-1 py-1">
+          New Chat
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add New Chat</DialogTitle>
-          <DialogDescription>
-            Please write in their username to add.
-          </DialogDescription>
+          <DialogDescription>Please Add any users.</DialogDescription>
         </DialogHeader>
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <div className="grid flex-1 gap-2">
             <Label htmlFor="username" className="sr-only">
               UserName
@@ -50,14 +46,14 @@ const NewChat = () => {
             <span className="sr-only">Search</span>
             <Search />
           </Button>
-        </div>
+        </div> */}
         <DisplayUsers />
         <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            {/* <Button type="button" variant="secondary">
+          {/* <DialogClose asChild>
+            <Button type="button" variant="secondary">
               Close
-            </Button> */}
-          </DialogClose>
+            </Button>
+          </DialogClose> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -72,6 +68,7 @@ const DisplayUsers = () => {
   const [chats, setChats] = useState<ChatType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [isError, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getAllUsersAndCurrent = async () => {
@@ -91,7 +88,8 @@ const DisplayUsers = () => {
         setUsers(allUser);
         setCurrUser(currentUser);
       } catch (error: any) {
-        logError(error.message);
+        // logError(error.message);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -100,6 +98,7 @@ const DisplayUsers = () => {
   }, []);
 
   const { toast } = useToast();
+  const reFetchChats = useReFetchChats();
 
   async function handleNewChat(userId: string) {
     try {
@@ -111,17 +110,17 @@ const DisplayUsers = () => {
         isGroupChat: false,
       });
       if ("error" in res) throw new Error("Error While adding new user.");
-      
+
       toast({
         title: "User added successfully",
       });
-
     } catch (error: any) {
       toast({
         title: "Could not add user, please try again.",
       });
       return { error: error.message };
     } finally {
+      reFetchChats((state) => !state);
       setLoading(false);
     }
   }
@@ -133,16 +132,23 @@ const DisplayUsers = () => {
           {!selectedUserId && loading && (
             <LoaderPinwheel className="animate-spin" />
           )}
+          {isError && (
+            <div className="text-sm text-purple-300 font-inter">
+              Sorry, No User Found!
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-1 gap-3 overflow-y-auto ">
           {users.map((user) => {
+            // Skip rendering the user if they are the current user or part of an existing chat
             if (
               user._id === currUser?._id ||
               chats.find((chat: any) =>
                 chat.users.find((u: any) => u._id === user._id)
               )
             )
-              return;
+              return null;
+            // other users
             return (
               <>
                 <div
