@@ -38,9 +38,9 @@ const Header = () => {
   }
 
   // Wait until currentUserId is available before rendering the component
-  if (!currentUserId) {
-    return undefined;
-  }
+  // if (!currentUserId) {
+  //   return undefined;
+  // }
 
   return (
     <header className="h-16 border border-purple-800 flex justify-between items-center px-4 py-3 mx-2 mt-1 rounded-xl bg-slate-800">
