@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CreateNewChat, UpdateChatById } from "@/server-actions/chat";
 import { useRouter } from "next/navigation";
+import useReFetchChats from "@/hooks/useReFetchChats";
 
 const GroupForm: FC<Props> = ({ oldChat }) => {
   const isEdit = oldChat ? true : false;
@@ -26,6 +27,9 @@ const GroupForm: FC<Props> = ({ oldChat }) => {
   const users = extract_chatsUser(chats, currentUserId!);
   
   const router = useRouter();
+
+  const reFetchChats = useReFetchChats();
+
 
   const groupNameRef = useRef<HTMLInputElement>(null);
   const groupDescRef = useRef<HTMLTextAreaElement>(null);
@@ -90,6 +94,7 @@ const GroupForm: FC<Props> = ({ oldChat }) => {
       } catch (error: any) {
         logError(error.message);
       } finally {
+        reFetchChats((state) => !state);
         setLoading(false);
       }
     }
