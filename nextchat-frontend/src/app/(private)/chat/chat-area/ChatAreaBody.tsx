@@ -82,3 +82,7 @@ const ChatAreaBody = () => {
 };
 
 export default ChatAreaBody;
+
+
+// when we start the app for the first time data is fetched from mongo, and when reloaded ans is stored in use states
+// live data is received thru socket ans is stored in use states

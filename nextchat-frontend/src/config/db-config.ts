@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export const connectMongoDB = async () => {
   try {
-    await mongoose.connect(process.env.NEXT_MONGO_URL!);
+    await mongoose.connect(process.env.MONGO_URL!);
     logInfo("connected to mongoDB");
   } catch (error:any) {
     logError("Failed to connect to mongoDB" + error);
@@ -12,7 +12,7 @@ export const connectMongoDB = async () => {
 };
 
 export function checkMongoDBEnvVar() {
-  const mongodbUri = process.env.NEXT_MONGO_URL;
+  const mongodbUri = process.env.MONGO_URL;
 
   if (!mongodbUri) {
     throw new Error(

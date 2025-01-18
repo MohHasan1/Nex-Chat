@@ -1,10 +1,10 @@
 import { io } from "socket.io-client";
 
-const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
+const socket = io(process.env.PUBLIC_BACKEND_URL);
 export default socket;
 
 export function checkSocketEnvVar() {
-  const socket = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const socket = process.env.PUBLIC_BACKEND_URL;
 
   if (!socket) {
     throw new Error(
