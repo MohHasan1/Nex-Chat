@@ -19,15 +19,17 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
-let connectedUsers = [];
+let connectedUsers = []; // explore redis for better solution
 io.on("connection", (socket) => {
   // logInfo(`socket ${socket.id} connected`);
 
   socket.on("login", (userId) => {
-    logInfo(userId);
+    logInfo("room created for: ", userId);
 
     if (!socket.rooms.has(userId)) {
+      // create a room //
       socket.join(userId);
+
       // if socket connection goes off, we don't want array to contain dup when socket is established again //
       if (!connectedUsers.includes(userId)) connectedUsers.push(userId);
     }
@@ -48,6 +50,16 @@ io.on("connection", (socket) => {
     // send a list of online users to all online users //
     connectedUsers.forEach((user) => {
       io.to(user).emit("online-users", connectedUsers);
+    });
+  });
+
+  socket.on("new-message", (payload) => {
+    logInfo(payload);
+
+    const users = payload.chat.users;
+
+    users.forEach((user) => {
+      io.to(user._id).emit("received_message", payload);
     });
   });
 });

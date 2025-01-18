@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 import UserType from "./user-type";
 
-interface IMessage {
+export interface IMessage {
   _id?: string;
   chat: string;
   sender: string | UserType;
@@ -10,8 +10,12 @@ interface IMessage {
   readBy?: string[];
   createdAt?: Date;
   updatedAt?: Date;
+
+  socketId?:string;
 }
 
 type MessageType = IMessage & Document;
 
 export default MessageType;
+
+// chat -> chatId

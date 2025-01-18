@@ -4,13 +4,14 @@ import UserType from "@/types/user-type";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
-const MessageBox = ({ msg }: { msg: MessageType }) => {
+const MessageBox = ({ msg }: { msg: Partial<MessageType> }) => {
   //   const { selectedChat } = useSelector((state: StoreStateType) => state.chat);
   // maybe add user profile later
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
 
   // type cast //
   const sender = msg.sender as UserType;
+  
 
   return (
     <div
@@ -32,6 +33,7 @@ const MessageBox = ({ msg }: { msg: MessageType }) => {
         <span className="font-inter text-md ">{msg.text}</span>
       </div>
       <div className="text-xs font-sand flex justify-center items-center gap-1 pointer-events-none">
+        <span className="text-purple-300 truncate max-w-16">{sender.username}</span>
         <span className="text-slate-400">
           {dayjs(msg.createdAt).format("DD-MM-YYYY")}
         </span>

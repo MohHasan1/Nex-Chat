@@ -1,0 +1,49 @@
+ const a = {
+  text: 's',
+  image: '',
+  chat: {
+    _id: 'sfdsfsd',
+    users: [ [Object], [Object] ],
+    createdBy: {
+      _id: 'sfd',
+      clerkUserId: 'fsdfsdf',
+      firstName: 'sdfsdf',  
+      lastName: 'dsfsd',
+      username: 'sdfsdf',
+      email: 'sdfsdf@sdfsdf.com',
+      profilePictureUrl: 'sdfsd',
+      bio: null,
+      createdAt: 'dfsd-12-dsfsdfsfsdfsddsd:32:16.151Z',
+      updatedAt: 'fsdfsdf-12-fsd:32:sdfsdf.151Z',
+      __v: 0
+    },
+    isGroupChat: false,
+    groupBio: 'Welcome to the group!',
+    groupAdmins: [],
+    createdAt: '2024-12-14T08:46:57.045Z',
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+  },
+  sender: '675d1860f5e86d04e1c4431c'
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+  },
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+0ed6fa25e',
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d18600ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d18600ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d18600ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d18600ed6fa25e',
+0ed6fa25e',
+    unReadCounts: { '675d35d1f5e86d04e1c4435a': 0, '675d1860f5e86d04e1c4431c': 0 }
+  },
+  sender: 'ds'
+}

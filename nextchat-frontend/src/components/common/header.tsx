@@ -1,16 +1,29 @@
 "use client";
 
 import socket from "@/config/socket-config";
+import { UpdateCurrentUserInMongo } from "@/server-actions/user";
 import { StoreStateType } from "@/store/redux-store";
 import { logInfo } from "@/utils/log";
 import { useUser, UserButton, useAuth } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const Header = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
   const { currentUserId } = useSelector((state: StoreStateType) => state.user);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Sync user data with your database
+    async function syncMongo() {
+      await UpdateCurrentUserInMongo();
+    }
+    syncMongo();
+    
+  }, [user]); 
 
   async function handleLogout() {
     try {
@@ -35,7 +48,6 @@ const Header = () => {
       <div className="flex gap-3">
         <h1 className="text-pretty font-sand font-medium">{user?.username}</h1>
         {/* <UserButton /> */}
-
         <UserButton>
           <UserButton.MenuItems>
             {/* Custom sign-out action */}

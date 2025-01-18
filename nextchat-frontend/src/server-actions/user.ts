@@ -4,6 +4,7 @@ import { connectMongoDB } from "@/config/db-config";
 import user from "@/models/user-model";
 import UserType from "@/types/user-type";
 import { cloneOrSerialize } from "@/utils/cloneOrSerialize";
+import { logInfo } from "@/utils/log";
 import { currentUser, User } from "@clerk/nextjs/server";
 
 connectMongoDB();
@@ -42,6 +43,42 @@ export const GetCurrentUserFromMongo = async () => {
     });
     if (mongoUser) return cloneOrSerialize(mongoUser);
     return { error: "User not found" };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const UpdateCurrentUserInMongo = async () => {
+  try {
+    // Get the current user from Clerk - updated //
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
+      return { error: "Error getting Updated user from Clerk" };
+    }
+
+    // Extract the primary email from Clerk user
+    const primaryEmail = clerkUser.emailAddresses.find(
+      (email) => email.id === clerkUser.primaryEmailAddressId
+    )?.emailAddress;
+
+    if (!primaryEmail) {
+      return { error: "Primary email not found in Clerk user data" };
+    }
+
+    // Update or create the user in MongoDB
+    const updatedUser: UserType | null = await user.findOneAndUpdate(
+      { clerkUserId: clerkUser.id }, // Locate user by Clerk ID
+      {
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
+        username: clerkUser.username,
+        email: primaryEmail,
+        profilePictureUrl: clerkUser.imageUrl,
+      }
+    );
+
+    logInfo("user is updated")
+    if (updatedUser) return cloneOrSerialize(updatedUser);
   } catch (error: any) {
     return { error: error.message };
   }

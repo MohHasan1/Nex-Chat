@@ -2,9 +2,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import socket from "@/config/socket-config";
 import { SendNewMessage } from "@/server-actions/message";
+// import { SendNewMessage } from "@/server-actions/message";
 import { StoreStateType } from "@/store/redux-store";
 import { logError } from "@/utils/log";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -20,10 +23,25 @@ const ChatAreaFooter = () => {
     if (msg === "") return;
 
     try {
-      const msgPayload = {
-        chat: selectedChat?._id,
+      const commonPayload = {
         text: msg,
         image: "",
+      };
+
+      // send msg using socket - msg should be displayed on both sender and receivers chat //
+      const socketPayload = {
+        ...commonPayload,
+        chat: selectedChat,
+        sender: currUser,
+        socketId: dayjs().unix(),
+      };
+
+      socket.emit("new-message", socketPayload);
+
+      // Store msg in mongodb //
+      const msgPayload = {
+        ...commonPayload,
+        chat: selectedChat?._id,
         sender: currUser?._id,
       };
 
