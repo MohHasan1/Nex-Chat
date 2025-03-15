@@ -2,7 +2,7 @@
 
 Nex-Chat is a real-time messaging application built with modern web technologies to provide a seamless chatting experience. It supports private and group messaging, user authentication, and media sharing.
 
-![Nex-Chat Preview](https://github.com/MohHasan1/Nex-Chat/blob/main/assets/nex-chat-preview.png) <!-- Add an actual image URL if available -->
+![Nex-Chat Preview](nex-chat-kappa.vercel.app) <!-- Add an actual image URL if available -->
 
 ## 🚀 Features
 
